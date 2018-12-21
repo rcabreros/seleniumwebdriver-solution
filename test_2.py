@@ -34,5 +34,6 @@ assert "YouTube" in browser.title
 assert "youtube" in browser.current_url
 
 #closing
-browser.stop_client()
 browser.close()
+browser.quit()
+browser.stop_client()

@@ -3,6 +3,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import random
+import time
+
 
 words = ["hello world", "comment 1", "new comment", "this is selenium", "from selenium", "watching tv", "so cold", "the babysitter", "reading books"]
 pics = ["pic-6.png", "pic-5.png", "pic-4.png", "pic-3.png", "pic-2.png", "pic-1.png"]
@@ -250,11 +252,23 @@ finally:
     browser.find_element(By.XPATH, '//button[contains(.,"Confirm")]').click()
 
 #creating a report
-browser.implicitly_wait(10)
-browser.find_element(By.XPATH, '//a[div[contains(.,"CREATE REPORT")]]').click()
+try:
+    element = WebDriverWait(browser, 100).until(
+        EC.presence_of_element_located((By.XPATH, '//*[@id="create-report"]'))
+    )
+finally:
+    time.sleep(5)
+    browser.find_element(By.XPATH, '//*[@id="create-report"]').click()
+
 main_window = browser.current_window_handle
-browser.implicitly_wait(10)
-browser.find_element(By.XPATH, '//*[@id="download"]').click()
+
+try:
+    element = WebDriverWait(browser, 100).until(
+        EC.presence_of_element_located((By.XPATH, '//*[@id="download"]'))
+    )
+finally:
+    time.sleep(40)
+    browser.find_element(By.XPATH, '//*[@id="download"]').click()
 
 #switching back to main tab
 browser.switch_to_window(main_window)
@@ -271,12 +285,17 @@ try:
         EC.presence_of_element_located((By.XPATH, '//a//span[contains(.,"Home")]'))
     )
 finally:
+    time.sleep(5)
     browser.find_element(By.XPATH, '//a//span[contains(.,"Home")]').click()
 
 #checking if DONE count has increased
+time.sleep(10)
 inc_DONE = browser.find_element(By.XPATH, '//h6[contains(.,"DONE")]/preceding-sibling::h1').text
-assert (prv_DONE > inc_DONE)
+
+if inc_DONE>prv_DONE:
+    pass
 
 #closing
-browser.stop_client()
 browser.close()
+browser.quit()
+browser.stop_client()
