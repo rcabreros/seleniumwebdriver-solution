@@ -295,6 +295,22 @@ inc_DONE = browser.find_element(By.XPATH, '//h6[contains(.,"DONE")]/preceding-si
 if inc_DONE>prv_DONE:
     pass
 
+#logging out
+try:
+    element = WebDriverWait(browser, 100).until(
+        EC.presence_of_element_located((By.XPATH, '//div[@class="hamburger-button i-hamburger"]'))
+    )
+finally:
+    browser.find_element(By.XPATH, '//div[@class="hamburger-button i-hamburger"]').click()
+
+try:
+    element = WebDriverWait(browser, 100).until(
+        EC.presence_of_element_located((By.XPATH, '//a//span[contains(.,"Logout")]'))
+    )
+finally:
+    time.sleep(5)
+    browser.find_element(By.XPATH, '//a//span[contains(.,"Logout")]').click()
+
 #closing
 browser.close()
 browser.quit()
